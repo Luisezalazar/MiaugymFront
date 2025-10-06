@@ -8,6 +8,6 @@ export default defineConfig({
   plugins: [react(), tailwindcss(), VitePWA({
     registerType: 'autoUpdate',
     includeAssets: ['apple-touch-icon.png'],
-    manifest: false,
+    manifest: '/manifest.json',
   })],
 })
