@@ -17,6 +17,7 @@ import { FoodDistribution } from './pages/food/FoodDistribution'
 import { CaloricSurplus } from './pages/food/CaloricSurplus'
 import { CaloricDeficit } from './pages/food/CaloricDeficit'
 import { Maintenance } from './pages/food/Maintenance'
+import { CalculatorFoods } from './pages/calculator/CalculatorFoods'
 
 export const App = () => {
   return (
@@ -35,6 +36,7 @@ export const App = () => {
             <Route path='/editRoutine/:id' element={<ProtectedRoute><EditRoutine /></ProtectedRoute>} />
             {/* Calculator */}
             <Route path='/calculator' element={<ProtectedRoute><Calculator /></ProtectedRoute>} />
+            <Route path='/calculatorFoods' element={<ProtectedRoute><CalculatorFoods /></ProtectedRoute>} />
             {/* Food */}
             <Route path='/food' element={<ProtectedRoute><FoodDistribution /></ProtectedRoute>} />
             <Route path='/superavit' element={<ProtectedRoute>< CaloricSurplus /></ProtectedRoute>} />

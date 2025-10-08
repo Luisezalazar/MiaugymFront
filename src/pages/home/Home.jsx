@@ -45,7 +45,7 @@ export const Home = () => {
       // If the event doesn't exists, Show instructions
       alert(
         'To install the app, touch the icon with the three dots then select "Add to homescreen"'
-        
+
       )
     }
   }
@@ -91,6 +91,40 @@ export const Home = () => {
                        bg-[#0202FF] hover:bg-[#3232ff]"
           >
             Calories Calculator
+          </button>
+        </Link>
+      </div>
+
+      {/* Meals */}
+      <h1 className="font-bold text-center text-2xl py-4">
+        Do you want to know how distribute meals and ideas for meals?
+      </h1>
+      <div className="flex justify-center mt-4">
+        <Link to="/food">
+          <button
+            type="button"
+            className="flex items-center dark:bg-primary-300 dark:text-black text-white
+                       px-4 py-2 rounded-lg dark:hover:bg-primary-500 transition mb-6 cursor-pointer dark:border-black dark:border-2 font-bold
+                       bg-[#0202FF] hover:bg-[#3232ff]"
+          >
+            Meals
+          </button>
+        </Link>
+      </div>
+
+      {/* Meals */}
+      <h1 className="font-bold text-center text-2xl py-4">
+        Do you want to know if a food is rich in protein?
+      </h1>
+      <div className="flex justify-center mt-4">
+        <Link to="/calculatorFoods">
+          <button
+            type="button"
+            className="flex items-center dark:bg-primary-300 dark:text-black text-white
+                       px-4 py-2 rounded-lg dark:hover:bg-primary-500 transition mb-6 cursor-pointer dark:border-black dark:border-2 font-bold
+                       bg-[#0202FF] hover:bg-[#3232ff]"
+          >
+            Foods calculator
           </button>
         </Link>
       </div>

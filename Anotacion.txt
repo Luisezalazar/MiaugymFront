@@ -2,13 +2,5 @@
 
 -Recordatorio sobre medicion de peso por mes
 
-
-
--Division de platos segun objetivo
-(recetas fitness(desayunos,almuerzo,merienda y cena))
-
--Calculadora sobre producto alto en proteina o bajo
-
-
 -Colocar ejercicios existentes para agregar al crear rutina
 con imagen(gif en lo posible)

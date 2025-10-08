@@ -16,6 +16,8 @@ export const Footer = () => {
                     <ul className="space-y-2">
                         <li><a href="/calculator" className='dark:hover:text-primary-500 hover:text-black transition'>Calculator calories</a></li>
                         <li><a href="/myRoutine" className='dark:hover:text-primary-500 hover:text-black transition'>My Routine</a></li>
+                        <li><a href="/calculatorFoods" className='dark:hover:text-primary-500 hover:text-black transition'>Food Calculator</a></li>
+                        <li><a href="/food" className='dark:hover:text-primary-500 hover:text-black transition'>Meals</a></li>
                     </ul>
                 </div>
                 {/* Column 3 - Social */}
