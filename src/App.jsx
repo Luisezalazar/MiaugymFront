@@ -19,7 +19,7 @@ import { CaloricDeficit } from './pages/food/CaloricDeficit'
 import { Maintenance } from './pages/food/Maintenance'
 import { CalculatorFoods } from './pages/calculator/CalculatorFoods'
 import { CreateGoal } from './pages/weightgoal/CreateGoal'
-import { WeightGoal } from './pages/weightGoal/weightGoal'
+import { WeightGoal } from './pages/weightGoal/WeightGoal'
 
 export const App = () => {
   return (
