@@ -16,7 +16,8 @@ export const Navbar = () => {
     { name: "My Routine", href: "/MyRoutine" },
     { name: "Calories Calculator", href: "/calculator" },
     { name: "Meals", href: "/food" },
-    {name: "Calculator Foods", href:"/calculatorFoods"}
+    { name: "Calculator Foods", href: "/calculatorFoods" },
+    { name: "Weight Goal", href: "/goal" }
   ]
 
   //Function know link active

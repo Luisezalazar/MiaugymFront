@@ -64,7 +64,7 @@ export const CreateRoutine = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Envía el token en la cabecera
+          "Authorization": `Bearer ${token}` 
         },
         body: JSON.stringify(data)
       })

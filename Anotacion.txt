@@ -2,5 +2,9 @@
 
 -Recordatorio sobre medicion de peso por mes
 
+--------------------------------------------------------------------------------------------
 -Colocar ejercicios existentes para agregar al crear rutina
 con imagen(gif en lo posible)
+--------------------------------------------------------------------------------------------
+-Cambiar la vista en la rutina en donde puede visualizar todos los ejercicios con una tabla
+o enfoca un solo ejercicio mostrando los datos y con el boton de serie

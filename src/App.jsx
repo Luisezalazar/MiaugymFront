@@ -18,6 +18,8 @@ import { CaloricSurplus } from './pages/food/CaloricSurplus'
 import { CaloricDeficit } from './pages/food/CaloricDeficit'
 import { Maintenance } from './pages/food/Maintenance'
 import { CalculatorFoods } from './pages/calculator/CalculatorFoods'
+import { CreateGoal } from './pages/weightgoal/CreateGoal'
+import { WeightGoal } from './pages/weightGoal/weightGoal'
 
 export const App = () => {
   return (
@@ -42,7 +44,9 @@ export const App = () => {
             <Route path='/superavit' element={<ProtectedRoute>< CaloricSurplus /></ProtectedRoute>} />
             <Route path='/deficit' element={<ProtectedRoute><CaloricDeficit /></ProtectedRoute>} />
             <Route path='/maintenance' element={<ProtectedRoute><Maintenance /></ProtectedRoute>} />
-
+            {/* Weight goal */}
+            <Route path='/goal' element={<ProtectedRoute><WeightGoal/></ProtectedRoute>} />
+            <Route path='/createGoal' element={<ProtectedRoute><CreateGoal/></ProtectedRoute>} />
             {/* Login */}
             <Route path='/*' element={<LogIn />} />
             <Route path='/signup' element={<Register />} />

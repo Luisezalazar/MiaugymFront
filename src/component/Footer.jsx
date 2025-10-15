@@ -18,7 +18,9 @@ export const Footer = () => {
                         <li><a href="/myRoutine" className='dark:hover:text-primary-500 hover:text-black transition'>My Routine</a></li>
                         <li><a href="/calculatorFoods" className='dark:hover:text-primary-500 hover:text-black transition'>Food Calculator</a></li>
                         <li><a href="/food" className='dark:hover:text-primary-500 hover:text-black transition'>Meals</a></li>
+                        <li><a href="/goal" className='dark:hover:text-primary-500 hover:text-black transition'>Weight Goal</a></li>
                     </ul>
+                    
                 </div>
                 {/* Column 3 - Social */}
                 <div>
