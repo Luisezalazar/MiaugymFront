@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import { X } from "lucide-react"
+import { Edit, Trash2 } from "lucide-react"
 
 export const WeightGoal = () => {
   const [goal, setGoal] = useState([])
@@ -45,6 +46,27 @@ export const WeightGoal = () => {
       setGoal([])
     } finally {
       setLoading(false)
+    }
+  }
+
+  //DeleteGoal
+  const handleDeleteGoal = async (goalId) => {
+    if (!confirm("Are you sure you want to delete this record?")) return
+    const token = await getToken()
+    try {
+      const res = await fetch(`${BASE_URL}/goals/deleteGoal/${goalId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      })
+      if (res.ok) {
+        setGoal(prev => prev.filter(g => g.id !== goalId))
+        console.log("Goal deleted")
+      }
+    } catch (error) {
+      console.error("Error deleting goal:", error)
     }
   }
 
@@ -130,6 +152,8 @@ export const WeightGoal = () => {
         Would you like to compare your records?
       </h2>
 
+      <p>You just have to mark the 2 images you want to compare</p>
+
       <h2 className="font-semibold text-2xl py-4">Registration List</h2>
 
       <div className="overflow-x-auto py-4 px-4">
@@ -140,6 +164,7 @@ export const WeightGoal = () => {
               <th className="px-4 py-2">Goal</th>
               <th className="px-4 py-2">Weight</th>
               <th className="px-4 py-2">Images</th>
+              <th className="px-4 py-2">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -150,6 +175,7 @@ export const WeightGoal = () => {
                   <td className="px-4 py-2">{g.objective}</td>
                   <td className="px-4 py-2">{g.weight}</td>
                   <td className="px-4 py-2 flex justify-center gap-2 flex-wrap">
+
                     {g.images?.length ? (
                       g.images.map((img, index) => (
                         <div key={img.id} className="relative">
@@ -172,13 +198,31 @@ export const WeightGoal = () => {
                       <span className="text-gray-500">No images</span>
                     )}
                   </td>
+                  <td className="px-2 py-2">
+                    <div className="flex justify-center gap-2">
+                      <Link to={`/editGoal/${g.id}`}>
+                        <button className="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg flex items-center justify-center">
+                          <Edit size={18} />
+                        </button>
+                      </Link>
+
+                      <button
+                        className="bg-red-500 hover:bg-red-600 text-white p-2 rounded-lg flex items-center justify-center"
+                        onClick={() => handleDeleteGoal(g.id)}
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </td>
+
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4" className="px-4 py-2 text-center">No records found</td>
+                <td colSpan="4" className="px-2 py-2 text-center">No records found</td>
               </tr>
             )}
+
           </tbody>
         </table>
       </div>
@@ -247,7 +291,7 @@ export const WeightGoal = () => {
                 <img
                   src={img.url}
                   alt="Goal"
-                  className="w-64 h-64 object-cover rounded-lg border-4 border-white shadow-lg"
+                  className="w-full h-80 object-cover rounded-lg border-4 border-white shadow-lg"
                 />
               </div>
             ))}

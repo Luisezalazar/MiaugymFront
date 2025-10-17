@@ -166,6 +166,10 @@ export const CreateGoal = () => {
                     />
                 </div>
 
+                <div className='bg-gray-800 rounded-lg px-2 py-2'>
+                    <h2>Note: Remember that it is recommended to take the photo in the morning on an empty stomach and witch your body relaxed.</h2>
+                </div>
+
                 {/* Save button */}
                 <div className="mt-6 text-right">
                     <button

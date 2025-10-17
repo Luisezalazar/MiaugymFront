@@ -5,7 +5,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 export const SeeRoutine = () => {
 
     const location = useLocation()
-    const navigate = useNavigate()
     const { routine } = location.state || {}
 
     const [count, setCount] = useState(
@@ -47,7 +46,7 @@ export const SeeRoutine = () => {
         setCompleted(prev => ({ ...prev, [index]: !prev[index] }))
     }
 
-    // nueva función para reiniciar el timer si ya está en 0
+    //Reset 0 chronometer
     const startTimer = () => {
         if (timeLeft === 0) {
             setTimeLeft(routine.duration)
