@@ -1,0 +1,5 @@
+Poder modificar orden en EDIT ROUTINE
+
+Arreglar edit en GOAL
+
+Arreglar check de que cuando las series sean igual al maximo, se marque solo

@@ -36,11 +36,19 @@ export const SeeRoutine = () => {
     const stopTimeOut = () => clearTimeout(timeOut.current)
 
     const increment = (index) => {
-        const newValue = count[index] + 1 > routine.routineExercise[index].series
-            ? 0
-            : count[index] + 1
-        setCount({ ...count, [index]: newValue })
-    }
+        const maxSeries = parseInt(routine.routineExercise[index].series); // asegurar número
+        const newValue = count[index] + 1;
+
+        let updatedValue = newValue;
+        if (newValue > maxSeries) updatedValue = 0;
+
+        setCount(prev => ({ ...prev, [index]: updatedValue }));
+
+        setCompleted(prev => ({
+            ...prev,
+            [index]: updatedValue === maxSeries ? true : updatedValue === 0 ? false : prev[index]
+        }));
+    };
 
     const handleComplete = (index) => {
         setCompleted(prev => ({ ...prev, [index]: !prev[index] }))

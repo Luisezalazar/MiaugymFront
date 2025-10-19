@@ -1,4 +1,4 @@
-import { Plus, Trash } from 'lucide-react';
+import { Plus, Trash, ArrowUp, ArrowDown } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext'
@@ -52,6 +52,15 @@ export const EditRoutine = () => {
 
     const removeExercise = (index) => {
         const newExercises = exercises.filter((_, i) => i !== index)
+        setExercises(newExercises)
+    }
+
+    const moveExercise = (fromIndex, direction) => {
+        const toIndex = fromIndex + direction
+        if (toIndex < 0 || toIndex >= exercises.length) return
+        const newExercises = [...exercises]
+        const [movedExercise] = newExercises.splice(fromIndex, 1)
+        newExercises.splice(toIndex, 0, movedExercise)
         setExercises(newExercises)
     }
 
@@ -196,15 +205,20 @@ export const EditRoutine = () => {
                                             placeholder='0'
                                         />
                                     </td>
-                                    <td className='px-4 py-4 text-center'>
-                                        <button
-                                            type='button'
-                                            onClick={() => removeExercise(index)}
-                                            className='dark:text-primary-300 dark:hover:text-primary-500 hover:text-black'
-                                        >
-                                            <Trash size={20} />
+                                    <td className='px-4 py-4 flex justify-center gap-2'>
+                                        {/* 👇 Botones para mover */}
+                                        <button type="button" onClick={() => moveExercise(index, -1)} disabled={index === 0} className='hover:text-primary-400'>
+                                            <ArrowUp size={18} />
+                                        </button>
+                                        <button type="button" onClick={() => moveExercise(index, 1)} disabled={index === exercises.length - 1} className='hover:text-primary-400'>
+                                            <ArrowDown size={18} />
+                                        </button>
+                                        <button type='button' onClick={() => removeExercise(index)} className='hover:text-red-400'>
+                                            <Trash size={18} />
                                         </button>
                                     </td>
+
+
                                 </tr>
                             ))}
                         </tbody>
