@@ -33,9 +33,6 @@ export const MyRoutine = () => {
       if (response.ok) {
         const data = await response.json()
         setRoutines(data.routines || [])
-      } else {
-        console.error("Failed to fetch user routines:", response.statusText);
-        setRoutines([]);
       }
     } catch (error) {
       console.error("Error fetching user routines:", error);
@@ -152,7 +149,7 @@ export const MyRoutine = () => {
                     <button
                       onClick={() => handleDelete(routine.id)}
                       className='flex items-center gap-2 w-full px-4 py-2 text-white dark:hover:bg-primary-700 hover:bg-[#0000ff] rounded-xl'
-                      disabled={loadingDelete === routine.id} 
+                      disabled={loadingDelete === routine.id}
                     >
                       {loadingDelete === routine.id ? "Deleting..." : <><Trash /> Delete</>}
                     </button>
