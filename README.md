@@ -1,12 +1,43 @@
-# React + Vite
+#  MiauGym – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**MiauGym** es una aplicación web desarrollada con **React** que permite a los usuarios gestionar sus rutinas de entrenamiento, registrar sus objetivos físicos y realizar un seguimiento visual de su progreso a través de imágenes corporales.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##  Tecnologías utilizadas
 
-## Expanding the ESLint configuration
+-  **React** – Librería principal del frontend  
+-  **React Router DOM** – Navegación entre páginas  
+-  **Tailwind CSS** – Estilos rápidos y adaptables  
+-  **JWT Authentication** – Manejo de sesiones seguras  
+-  **Cloudinary** – Almacenamiento de imágenes  
+-  **Vite** – Bundler para desarrollo rápido  
+- **Context API + useReducer** – Manejo de estado global  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+##  Funcionalidades principales
+
+-  **Gestión de objetivos (Goals):**  
+  Crear, editar y visualizar objetivos con posibilidad de subir imágenes del cuerpo para comparar el progreso.
+
+-  **Rutinas personalizadas:**  
+  Crear rutinas con distintos ejercicios, pesos, repeticiones y series, totalmente adaptables al usuario.
+
+-  **Subida de imágenes con Cloudinary:**  
+  Implementación del sistema de carga de imágenes mediante `multer` y la API de Cloudinary para un seguimiento visual seguro y rápido.
+
+-  **Autenticación de usuarios:**  
+  Ingreso mediante token JWT para asegurar que cada usuario solo acceda a su propia información.
+
+-  **Modo oscuro y claro:**  
+  Interfaz adaptable al tema del sistema, mejorando la experiencia visual.
+
+---
+
+  **Para utilizar el proyecto realice lo siguiente:**
+  `npm install`
+
+ Colocar la variable de entorno 
+
+ VITE_BASE_URL=VITE_BASE_URL
