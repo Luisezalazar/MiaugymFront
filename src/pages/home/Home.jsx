@@ -137,9 +137,7 @@ export const Home = () => {
 
       </Link>
 
-      <h1 className="font-bold text-center text-2xl py-4">
-        This project is still in progress, improvements will come.
-      </h1>
+      
       <h1 className="font-bold text-center text-2xl py-4">
         Thank you for using MiauGym!
       </h1>
