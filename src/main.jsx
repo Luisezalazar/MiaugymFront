@@ -5,6 +5,7 @@ import { App } from './App'
 import { AuthProvider } from './context/AuthContext'
 import { registerSW } from 'virtual:pwa-register'
 import { ThemeProvider } from './context/ThemeContext'
+import { LanguageProvider } from './context/LanguageContext'
 
 registerSW({
   onNeedRefresh() {
@@ -20,7 +21,9 @@ createRoot(document.getElementById('root')).render(
     <StrictMode>
       <AuthProvider>
         <ThemeProvider>
-          <App />
+          <LanguageProvider>
+            <App />
+          </LanguageProvider>
         </ThemeProvider>
       </AuthProvider>
     </StrictMode>
