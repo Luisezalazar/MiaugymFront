@@ -27,7 +27,7 @@ export const App = () => {
     <>
       <AuthProvider>
         <Navbar></Navbar>
-        <div className=' dark:bg-[#202324] text-black dark:text-white bg-white'>
+        <main className='app-main bg-surface text-ink'>
           <Routes>
             {/* Home */}
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -54,7 +54,7 @@ export const App = () => {
             <Route path='/signup' element={<Register />} />
             <Route path='/login' element={<LogIn />} />
           </Routes>
-        </div>
+        </main>
         <Footer />
       </AuthProvider>
     </>

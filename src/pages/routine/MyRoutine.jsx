@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import { Edit, Menu, Trash, X } from 'lucide-react'
+import { Dumbbell, Edit, MoreVertical, Plus, Timer, Trash, X } from 'lucide-react'
+import { useLang } from '../../context/LanguageContext'
 
 export const MyRoutine = () => {
 
   const [routines, setRoutines] = useState([])
   const { user, getToken } = useAuth();
+  const { t } = useLang()
   const [menu, setMenu] = useState(null)
   const navigate = useNavigate();
   const BASE_URL = import.meta.env.VITE_BASE_URL
@@ -52,7 +54,7 @@ export const MyRoutine = () => {
   }
 
   const handleDelete = async (routineId) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this routine?")
+    const confirmDelete = window.confirm(t('routine.confirmDelete'))
     if (!confirmDelete) return;
 
     const token = getToken();
@@ -90,79 +92,148 @@ export const MyRoutine = () => {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
-      <h2 className="text-3xl font-bold text-center mb-8">
-        {user?.user ? `${user.user}'s Routines ` : 'My Routines'}
-      </h2>
+      {/* Encabezado: titulo y accion primaria en la misma linea */}
+      <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
+            {user?.user ? t('routine.ofUser', { user: user.user }) : t('routine.mine')}
+          </h1>
+          {!loading && routines.length > 0 && (
+            <p className="text-sm text-ink-muted mt-1">
+              {routines.length} {routines.length === 1 ? t('routine.one') : t('routine.many')}
+            </p>
+          )}
+        </div>
 
-      {/* Button create routine */}
-      <div className="flex justify-center mt-4">
-        <Link to="/createRoutine">
-          <button type='button' className='flex items-center font-bold dark:bg-primary-300 dark:border-2 dark:text-zinc-950 text-white
-           px-4 py-2 rounded-lg dark:hover:bg-primary-600 transition mb-6 cursor-pointer
-           bg-[#0202FF] hover:bg-[#3232ff] '>
-            Create Routine
-          </button>
+        <Link to="/createRoutine"
+          className='flex items-center gap-2 bg-accent text-on-accent hover:bg-accent-hover
+            px-4 py-2.5 rounded-lg font-semibold transition shrink-0'>
+          <Plus size={18} />
+          {t('routine.create')}
         </Link>
       </div>
 
-      {/* Pre Loading */}
       {loading ? (
-
-        <div className="flex flex-col justify-center items-center my-8">
-          <span className="dark:text-white  text-black font-semibold">Search rotuines...</span>
-
-          <div className="w-64 bg-gray-200 rounded-full h-4 overflow-hidden">
-            <div className="dark:bg-primary-600 bg-[#0202FF] h-4 animate-pulse w-3/4" />
-          </div>
+        /* Esqueletos con la misma forma que las tarjetas reales:
+           la pagina no salta cuando terminan de cargar. */
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+          {[0, 1, 2].map((i) => (
+            <div key={i} className='bg-raised border border-line rounded-xl p-5 animate-pulse'>
+              <div className='h-5 w-2/3 bg-sunken rounded mb-4' />
+              <div className='h-4 w-1/3 bg-sunken rounded mb-6' />
+              <div className='h-3 w-full bg-sunken rounded mb-2' />
+              <div className='h-3 w-4/5 bg-sunken rounded' />
+            </div>
+          ))}
         </div>
-      ) : (
+      ) : routines.length > 0 ? (
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-          {routines.length > 0 ? (
-            routines.map((routine) => (
-              <div key={routine.id} className='relative'>
-                <button key={routine.id} onClick={() => handleSeeRoutine(routine)}
-                  className='dark:bg-gray-900 shadow-xl rounded-2xl px-8 py-6 border-2 dark:border-primary-500 border-black items-center justify-center text-xl font-semibold text-white 
-          dark:hover:bg-primary-700 hover:text-white w-full md:w-60 transition cursor-pointer flex bg-[#0202FF] hover:bg-[#3232ff]'>
-                  {routine.name}
-                </button>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4'>
+          {routines.map((routine) => {
+            const exercises = routine.routineExercise || []
+            return (
+              <div key={routine.id}
+                className='relative group bg-raised border border-line rounded-xl
+                  hover:border-accent transition'>
 
+                {/* Area principal: toda la tarjeta abre la rutina */}
+                <button onClick={() => handleSeeRoutine(routine)}
+                  className='w-full text-left p-5 pr-12 cursor-pointer'>
 
+                  <h2 className='text-lg font-semibold text-ink truncate'>
+                    {routine.name}
+                  </h2>
 
-                {/* Button burguer */}
-                <button onClick={() => setMenu(menu === routine.id ? null : routine.id)}
-                  className='absolute top-7 right-3 rounded-lg dark:hover:bg-primary-300 hover:bg-black'>
-                  {menu === routine.id ? (<X size={30} />) : (<Menu size={30} className='text-white' />)}
-                </button>
-
-                {/* Menu */}
-                {menu === routine.id && (
-                  <div className='absolute top-12 right-2 dark:bg-gray-800 border-2 bg-[#0303be] rounded-xl shadow-lg w-30 z-10'>
-                    <button onClick={() => handleEdit(routine)}
-                      className='flex items-center gap-2 w-full px-4 py-2 text-white dark:hover:bg-primary-700 hover:bg-[#0000ff] rounded-xl'>
-                      <Edit /> Edit
-                    </button>
-
-
-                    <button
-                      onClick={() => handleDelete(routine.id)}
-                      className='flex items-center gap-2 w-full px-4 py-2 text-white dark:hover:bg-primary-700 hover:bg-[#0000ff] rounded-xl'
-                      disabled={loadingDelete === routine.id}
-                    >
-                      {loadingDelete === routine.id ? "Deleting..." : <><Trash /> Delete</>}
-                    </button>
-
+                  {/* Metadatos: lo que antes habia que abrir la rutina para saber */}
+                  <div className='flex items-center gap-4 mt-2 text-sm text-ink-muted'>
+                    <span className='flex items-center gap-1.5'>
+                      <Dumbbell size={15} />
+                      {exercises.length} {exercises.length === 1 ? t('routine.exercise') : t('routine.exercises')}
+                    </span>
+                    {routine.duration ? (
+                      <span className='flex items-center gap-1.5'>
+                        <Timer size={15} />
+                        {routine.duration}s {t('routine.rest')}
+                      </span>
+                    ) : null}
                   </div>
+
+                  {/* Vista previa de los primeros ejercicios */}
+                  {exercises.length > 0 && (
+                    <ul className='mt-4 pt-4 border-t border-line space-y-1.5'>
+                      {exercises.slice(0, 3).map((ex) => (
+                        <li key={ex.id} className='flex justify-between gap-3 text-sm'>
+                          <span className='text-ink-muted truncate'>{ex.name}</span>
+                          <span className='text-ink-faint shrink-0 tabular-nums'>
+                            {ex.series}×{ex.repetitions}
+                          </span>
+                        </li>
+                      ))}
+                      {exercises.length > 3 && (
+                        <li className='text-xs text-ink-faint pt-1'>
+                          +{exercises.length - 3} {t('routine.more')}
+                        </li>
+                      )}
+                    </ul>
+                  )}
+                </button>
+
+                {/* Menu contextual */}
+                <button onClick={() => setMenu(menu === routine.id ? null : routine.id)}
+                  aria-label={t('routine.options')}
+                  className='absolute top-3 right-3 p-2 rounded-md text-ink-muted
+                    hover:text-ink hover:bg-sunken transition'>
+                  {menu === routine.id ? <X size={18} /> : <MoreVertical size={18} />}
+                </button>
+
+                {menu === routine.id && (
+                  <>
+                    {/* Capa invisible: cerrar tocando fuera del menu */}
+                    <div className='fixed inset-0 z-10' onClick={() => setMenu(null)} />
+
+                    <div className='absolute top-12 right-3 z-20 w-40 py-1
+                      bg-raised border border-line rounded-lg shadow-lg'>
+                      <button onClick={() => handleEdit(routine)}
+                        className='flex items-center gap-2.5 w-full px-3 py-2 text-sm
+                          text-ink-muted hover:text-ink hover:bg-sunken transition'>
+                        <Edit size={16} /> {t('routine.edit')}
+                      </button>
+
+                      <button
+                        onClick={() => handleDelete(routine.id)}
+                        className='flex items-center gap-2.5 w-full px-3 py-2 text-sm
+                          text-danger hover:bg-danger-soft transition disabled:opacity-50'
+                        disabled={loadingDelete === routine.id}
+                      >
+                        <Trash size={16} />
+                        {loadingDelete === routine.id ? t('routine.deleting') : t('routine.delete')}
+                      </button>
+                    </div>
+                  </>
                 )}
               </div>
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-400 text-xl">
-              There are no assigned routines
-            </p>
-          )}
+            )
+          })}
+        </div>
+      ) : (
+        /* Estado vacio con salida clara, en vez de una linea de texto gris */
+        <div className='flex flex-col items-center text-center py-16 px-6
+          border border-dashed border-line rounded-xl'>
+          <div className='p-3 rounded-full bg-accent-soft text-accent mb-4'>
+            <Dumbbell size={28} />
+          </div>
+          <h2 className='text-lg font-semibold text-ink'>{t('routine.emptyTitle')}</h2>
+          <p className='text-sm text-ink-muted mt-1.5 max-w-sm'>
+            {t('routine.emptyText')}
+          </p>
+          <Link to="/createRoutine"
+            className='mt-6 flex items-center gap-2 bg-accent text-on-accent hover:bg-accent-hover
+              px-4 py-2.5 rounded-lg font-semibold transition'>
+            <Plus size={18} />
+            {t('routine.create')}
+          </Link>
         </div>
       )}
     </div>

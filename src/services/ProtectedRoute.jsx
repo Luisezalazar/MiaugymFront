@@ -2,19 +2,19 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useLang } from '../context/LanguageContext'
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth()
+    const { t } = useLang()
 
     // Mostrar loading mientras verifica
     if (loading) {
         return (
-            <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-                <div className='bg-gray-800 p-8 rounded-2xl shadow-xl text-center'>
-                    <p className='text-xl font-bold mb-4 text-white'>Loading...</p>
-                    <div className='w-64 bg-gray-200 rounded-full h-4 overflow-hidden'>
-                        <div className='bg-red-600 h-4 animate-pulse w-1/2'></div>
-                    </div>
+            <div className='fixed inset-0 flex items-center justify-center bg-black/50 z-50'>
+                <div className='bg-raised border border-line p-8 rounded-2xl shadow-xl text-center min-w-[16rem]'>
+                    <p className='text-xl font-bold mb-4 text-ink'>{t('auth.loading')}</p>
+                    <div className="progress-track" />
                 </div>
             </div>
         )

@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { AlertCircle, Eye, EyeOff, LogIn as LogInIcon } from 'lucide-react'
+import { useLang } from '../../context/LanguageContext'
 
 export const LogIn = () => {
     const [formulary, setFormulary] = useState({
@@ -10,8 +12,9 @@ export const LogIn = () => {
 
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
-
+    const [showPassword, setShowPassword] = useState(false)
     const { login } = useAuth()
+    const { t } = useLang()
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -20,7 +23,6 @@ export const LogIn = () => {
             ...previusData,
             [name]: value
         }))
-
         if (error) setError('')
     }
 
@@ -35,64 +37,87 @@ export const LogIn = () => {
             if (result.success) {
                 navigate("/home")
             } else {
-                setError(result.message)
-
+                setError(result.message || t('auth.badCredentials'))
             }
         } catch (error) {
             console.log("Error login Person", error)
-            setError('Error inesperado. Intenta nuevamente.')
+            setError(t('auth.unexpected'))
         }
-        finally{
+        finally {
             setLoading(false)
         }
     }
 
     return (
-        <div className='px-6 py-8'>
-            <div>
-                <h1 className='text-center text-4xl mb-6 font-semibold'>Log In</h1>
-                <form onSubmit={handleSubmit} className='max-w-xl mx-auto p-6 dark:bg-neutral-900 rounded-lg shadow-lg bg-[#0202FF]'>
-                    <h1 className='text-center text-2xl font-bold text-white'>Miau<span className='dark:text-primary-300 text-black'>Gym</span> </h1>
+        <div className='flex items-center justify-center px-4 py-12 sm:py-20'>
+            <div className='w-full max-w-sm'>
 
-                    {/* Mostrar error si existe */}
+                <h1 className='text-2xl font-bold text-center tracking-tight'>{t('auth.login')}</h1>
+                <p className='text-sm text-ink-muted text-center mt-1.5 mb-6'>
+                    {t('auth.loginSubtitle')}
+                </p>
+
+                <form onSubmit={handleSubmit}
+                    className='bg-raised border border-line rounded-xl p-6 shadow-sm'>
+
+                    {/* El error usa el token de peligro: antes era cian, el mismo color que el acento */}
                     {error && (
-                        <div className='mb-4 p-3 bg-primary-100 border border-primary-400 text-primary-700 rounded'>
-                            {error}
+                        <div role="alert"
+                            className='flex items-start gap-2.5 mb-5 p-3 rounded-lg
+                                bg-danger-soft border border-danger text-danger text-sm'>
+                            <AlertCircle size={18} className='shrink-0 mt-px' />
+                            <span>{error}</span>
                         </div>
                     )}
 
-                    <div className='mb-6'>
-                        <label htmlFor="user" className='block font-semibold mb-2  text-white '>User: </label>
-                        <input type="text" name='user' value={formulary.user} onChange={handleChange}
-                            className='w-full py-2 px-2  shadow-2xl rounded-lg focus:ring-2 focus:ring-primary-500 border-white border-2' required />
+                    <div className='space-y-4'>
+                        <div>
+                            <label htmlFor="user" className='block text-sm font-medium mb-1.5 text-ink'>
+                                {t('auth.user')}
+                            </label>
+                            <input type="text" id="user" name='user' autoComplete='username'
+                                value={formulary.user} onChange={handleChange}
+                                className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
+                                required />
+                        </div>
 
-                        <label htmlFor="password" className='block font-semibold mb-2 mt-4 text-white'>Password: </label>
-                        <input type="password" name='password' value={formulary.password} onChange={handleChange}
-                            className='w-full py-2 px-2 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 border-white' required />
-                    </div>
-
-                    {/* Save button */}
-                    <div className="mt-6 text-right">
-                        <h3 className='mb-3 text-white'>Are you not registered?, <Link className='border-b-1 hover:text-primary-600 text-primary-400' to={"/signup"}>Sign up</Link></h3>
-                        <button type='submit'
-                            className={`px-4 py-2 rounded-lg transition text-white ${loading ? "bg-primary-500 cursor-not-allowed" : "dark:bg-primary-300 dark:hover:bg-primary-500 hover:bg-[#3131fd] border-2 dark:border-black dark:text-black font-semibold"}`}
-                            disabled={loading}>
-                            {loading ? "Loading user..." : "Log in"}
-                        </button>
-                    </div>
-                </form>
-
-                {/* Modal loading */}
-                {loading && (
-                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-                        <div className='bg-black p-8 rounded-2xl shadow-xl text-center'>
-                            <p className='text-xl font-bold mb-4 text-white'>Loading user...</p>
-                            <div className='w-64 bg-black rounded-full h-4 overflow-hidden'>
-                                <div className='bg-primary-600 h-4 animate-pulse w-1/2'></div>
+                        <div>
+                            <label htmlFor="password" className='block text-sm font-medium mb-1.5 text-ink'>
+                                {t('auth.password')}
+                            </label>
+                            <div className='relative'>
+                                <input type={showPassword ? "text" : "password"} id="password" name='password'
+                                    autoComplete='current-password'
+                                    value={formulary.password} onChange={handleChange}
+                                    className='w-full px-3 py-2.5 pr-11 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
+                                    required />
+                                <button type='button'
+                                    onClick={() => setShowPassword(v => !v)}
+                                    aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                                    className='absolute inset-y-0 right-0 px-3 flex items-center
+                                        text-ink-faint hover:text-ink transition'>
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
                             </div>
                         </div>
                     </div>
-                )}
+
+                    <button type='submit'
+                        className='w-full flex items-center justify-center gap-2 mt-6 px-4 py-2.5 rounded-lg
+                            font-semibold bg-accent text-on-accent hover:bg-accent-hover transition
+                            disabled:opacity-60 disabled:cursor-not-allowed'
+                        disabled={loading}>
+                        <LogInIcon size={18} />
+                        {loading ? t('auth.loggingIn') : t('auth.login')}
+                    </button>
+                </form>
+
+                <p className='text-sm text-ink-muted text-center mt-5'>
+                    {t('auth.notRegistered')}{' '}
+                    <Link className='font-medium text-accent hover:underline' to={"/signup"}>
+                        {t('auth.signup')}
+                    </Link>
+                </p>
             </div>
         </div>
     )

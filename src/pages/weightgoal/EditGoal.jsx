@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { useLang } from '../../context/LanguageContext'
 
 export const EditGoal = () => {
     const { id } = useParams()
@@ -15,6 +16,7 @@ export const EditGoal = () => {
     const [existingImages, setExistingImages] = useState([])
     const [imagesToDelete, setImagesToDelete] = useState([])
     const [loading, setLoading] = useState(false)
+    const { t } = useLang()
 
     // Cargar la meta
     const fetchGoal = async () => {
@@ -119,33 +121,33 @@ export const EditGoal = () => {
 
     return (
         <div className='px-6 py-8'>
-            <form onSubmit={handleSubmit} className='max-w-4xl mx-auto p-6 dark:bg-neutral-900 bg-[#0202FF] rounded-lg shadow-lg'>
-                <h1 className='text-center text-2xl font-bold mb-6'>Edit Record</h1>
+            <form onSubmit={handleSubmit} className='max-w-4xl mx-auto p-6 bg-raised rounded-lg shadow-lg'>
+                <h1 className='text-center text-2xl font-bold mb-6'>{t('goal.editTitle')}</h1>
                 {/* Weight */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Weight:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.weight')}</label>
                     <input type="text" value={weight} onChange={(e) => setWeight(e.target.value)}
-                        className='w-full px-4 py-2 text-white border rounded-lg focus:ring-2 focus:ring-primary-500'
+                        className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
                         required
                     />
                 </div>
                 {/* Objective */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Objective:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.objective')}</label>
                     <input type="text" value={objective} onChange={(e) => setObjective(e.target.value)}
-                        className='w-full px-4 py-2 text-white border rounded-lg focus:ring-2 focus:ring-primary-500'
+                        className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
                         required
                     />
                 </div>
                 {/* Existing images */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Existing Images:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.existingImages')}</label>
                     <div className="flex flex-wrap gap-2 mb-2">
                         {existingImages.map((img, idx) => (
                             <div key={img.id} className="relative">
                                 <img src={img.url} alt={`Goal ${idx}`} className="w-36 h-36 object-cover rounded-lg" />
                                 <button type="button" onClick={() => removeExistingImage(idx)}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                                    className="absolute top-1 right-1 bg-red-600 text-white hover:bg-red-700 rounded-full w-6 h-6 flex items-center justify-center text-sm">
                                     ×
                                 </button>
                             </div>
@@ -154,26 +156,26 @@ export const EditGoal = () => {
                 </div>
                 {/* New image previews */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Add New Images:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.newImages')}</label>
                     <div className="flex flex-wrap gap-2 mb-2">
                         {imagePreviews.map((preview, idx) => (
                             <div key={preview.id} className="relative" draggable onDragStart={(e) => handleDragStart(e, idx)} onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, idx)}>
                                 <img src={preview.url} alt={`New ${idx}`} className="w-36 h-36 object-cover rounded-lg" />
                                 <button type="button" onClick={() => removeNewImage(idx)}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                                    className="absolute top-1 right-1 bg-red-600 text-white hover:bg-red-700 rounded-full w-6 h-6 flex items-center justify-center text-sm">
                                     ×
                                 </button>
                             </div>
                         ))}
                     </div>
                     <input type="file" multiple accept="image/*" onChange={handleFileChange}
-                        className='w-full py-2 px-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-neutral-800 text-white'
+                        className='w-full text-sm text-ink-muted rounded-lg border border-dashed border-line px-3 py-3 cursor-pointer transition hover:border-accent file:mr-3 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-on-accent file:cursor-pointer'
                     />
                 </div>
                 {/* Save button */}
                 <div className="mt-6 text-right">
-                    <button type='submit' className={`px-4 py-2 rounded-lg transition text-white ${loading ? "bg-primary-500 cursor-not-allowed" : "dark:bg-primary-300 dark:text-black border-2 dark:border-black font-semibold dark:hover:bg-primary-600 hover:bg-[#0303be]"}`} disabled={loading}>
-                        {loading ? "Updating record..." : "Save Record"}
+                    <button type='submit' className='w-full mt-2 px-4 py-2.5 rounded-lg font-semibold bg-accent text-on-accent hover:bg-accent-hover transition disabled:opacity-60 disabled:cursor-not-allowed' disabled={loading}>
+                        {loading ? t('goal.updating') : t('goal.save')}
                     </button>
                 </div>
             </form>

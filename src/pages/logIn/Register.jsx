@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { AlertCircle, Eye, EyeOff, UserPlus } from 'lucide-react'
+import { useLang } from '../../context/LanguageContext'
 
 export const Register = () => {
     const [formulary, setFormulary] = useState({
@@ -10,7 +12,10 @@ export const Register = () => {
     })
 
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const { register, isAuthenticated } = useAuth()
+    const { t } = useLang()
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -19,84 +24,118 @@ export const Register = () => {
             ...previusData,
             [name]: value
         }))
+        if (error) setError('')
     }
 
     useEffect(() => {
+        // Antes navegaba a "/dashboard", una ruta que no existe en App.jsx:
+        // el catch-all "/*" la mandaba de vuelta al Log In.
         if (isAuthenticated) {
-            navigate("/dashboard") // Cambia por tu ruta principal
+            navigate("/home")
         }
     }, [isAuthenticated, navigate])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setLoading(true)
+        setError('')
 
         try {
             const result = await register(formulary)
 
             if (result.success) {
-                setTimeout(() => {
-                    setLoading(false)
-                    navigate("/dashboard") // Cambia por tu ruta principal
-                }, 1000)
+                navigate("/home")
             } else {
-                console.log("Registration failed:", result.message)
-                setLoading(false)
+                // Antes esto solo iba a la consola: el usuario no veia nada.
+                setError(result.message || t('auth.createFailed'))
             }
         } catch (error) {
             console.log("Error create Person", error)
+            setError(t('auth.unexpected'))
+        } finally {
             setLoading(false)
         }
     }
 
     return (
-        <div className='px-6 py-8'>
-            <div>
-                <h1 className='text-center text-4xl mb-6 font-semibold'>Sign up</h1>
-                <form onSubmit={handleSubmit} className='max-w-xl mx-auto p-6 bg-neutral-900 rounded-lg shadow-lg'>
-                    <h1 className='text-center text-2xl font-bold'>Miau<span className='text-primary-300'>Gym</span></h1>
-                    <div className='mb-6'>
+        <div className='flex items-center justify-center px-4 py-12 sm:py-20'>
+            <div className='w-full max-w-sm'>
 
-                        <label htmlFor="user" className='block font-semibold mb-2  text-white'>User: </label>
-                        <input type="text" name='user' value={formulary.user} onChange={handleChange}
-                            className='w-full py-2 px-2 border rounded-lg focus:ring-2 focus:ring-primary-500' required />
+                <h1 className='text-2xl font-bold text-center tracking-tight'>{t('auth.signup')}</h1>
+                <p className='text-sm text-ink-muted text-center mt-1.5 mb-6'>
+                    {t('auth.signupSubtitle')}
+                </p>
 
-                        <label htmlFor="password" className='block font-semibold mb-2 mt-4 text-white'>Password: </label>
-                        <input type="password" name='password' value={formulary.password} onChange={handleChange}
-                            className='w-full py-2 px-2 border rounded-lg focus:ring-2 focus:ring-primary-500' required />
+                <form onSubmit={handleSubmit}
+                    className='bg-raised border border-line rounded-xl p-6 shadow-sm'>
 
-                        <label htmlFor="email" className='block font-semibold mb-2 mt-4 text-white'>Email: </label>
-                        <input type="email" name='email' value={formulary.email} onChange={handleChange}
-                            className='w-full py-2 px-2 border rounded-lg focus:ring-2 focus:ring-primary-500' required />
+                    {error && (
+                        <div role="alert"
+                            className='flex items-start gap-2.5 mb-5 p-3 rounded-lg
+                                bg-danger-soft border border-danger text-danger text-sm'>
+                            <AlertCircle size={18} className='shrink-0 mt-px' />
+                            <span>{error}</span>
+                        </div>
+                    )}
 
-                    </div>
+                    <div className='space-y-4'>
+                        <div>
+                            <label htmlFor="user" className='block text-sm font-medium mb-1.5 text-ink'>
+                                {t('auth.user')}
+                            </label>
+                            <input type="text" id="user" name='user' autoComplete='username'
+                                value={formulary.user} onChange={handleChange}
+                                className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
+                                required />
+                        </div>
 
-                    {/* Login link */}
-                    <div className="mb-3">
-                        <h3 className='text-white'>Already have an account?, <Link className='border-b-1 hover:text-primary-600 text-primary-300' to={"/login"}>Log in</Link></h3>
-                    </div>
+                        <div>
+                            <label htmlFor="email" className='block text-sm font-medium mb-1.5 text-ink'>
+                                {t('auth.email')}
+                            </label>
+                            <input type="email" id="email" name='email' autoComplete='email'
+                                value={formulary.email} onChange={handleChange}
+                                className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
+                                required />
+                        </div>
 
-                    {/* Save button */}
-                    <div className="mt-6 text-right">
-                        <button type='submit'
-                            className={`px-4 py-2 rounded-lg transition text-white ${loading ? "bg-primary-300 cursor-not-allowed" : "bg-primary-700 hover:bg-primary-600"}`}
-                            disabled={loading}>
-                            {loading ? "Creating user..." : "Sign up"}
-                        </button>
-                    </div>
-                </form>
-
-                {/* Modal loading */}
-                {loading && (
-                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-                        <div className='bg-gray-800 p-8 rounded-2xl shadow-xl text-center'>
-                            <p className='text-xl font-bold mb-4 text-white'>Creating user...</p>
-                            <div className='w-64 bg-gray-200 rounded-full h-4 overflow-hidden'>
-                                <div className='bg-primary-600 h-4 animate-pulse w-1/2'></div>
+                        <div>
+                            <label htmlFor="password" className='block text-sm font-medium mb-1.5 text-ink'>
+                                {t('auth.password')}
+                            </label>
+                            <div className='relative'>
+                                <input type={showPassword ? "text" : "password"} id="password" name='password'
+                                    autoComplete='new-password'
+                                    value={formulary.password} onChange={handleChange}
+                                    className='w-full px-3 py-2.5 pr-11 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
+                                    required />
+                                <button type='button'
+                                    onClick={() => setShowPassword(v => !v)}
+                                    aria-label={showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                                    className='absolute inset-y-0 right-0 px-3 flex items-center
+                                        text-ink-faint hover:text-ink transition'>
+                                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                </button>
                             </div>
                         </div>
                     </div>
-                )}
+
+                    <button type='submit'
+                        className='w-full flex items-center justify-center gap-2 mt-6 px-4 py-2.5 rounded-lg
+                            font-semibold bg-accent text-on-accent hover:bg-accent-hover transition
+                            disabled:opacity-60 disabled:cursor-not-allowed'
+                        disabled={loading}>
+                        <UserPlus size={18} />
+                        {loading ? t('auth.creating') : t('auth.signup')}
+                    </button>
+                </form>
+
+                <p className='text-sm text-ink-muted text-center mt-5'>
+                    {t('auth.haveAccount')}{' '}
+                    <Link className='font-medium text-accent hover:underline' to={"/login"}>
+                        {t('auth.login')}
+                    </Link>
+                </p>
             </div>
         </div>
     )

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { Info } from 'lucide-react'
+import { useLang } from '../../context/LanguageContext'
 
 export const CreateGoal = () => {
 
@@ -9,6 +11,7 @@ export const CreateGoal = () => {
     const [images, setImages] = useState([])
     const [imagePreviews, setImagePreviews] = useState([])
     const [loading, setLoading] = useState(false)
+    const { t } = useLang()
 
     const { user, getToken } = useAuth()
     const BASE_URL = import.meta.env.VITE_BASE_URL
@@ -108,33 +111,33 @@ export const CreateGoal = () => {
         <div className='px-6 py-8'>
             <form
                 onSubmit={handleSubmit}
-                className='max-w-4xl mx-auto p-6 dark:bg-neutral-900 bg-[#0202FF] rounded-lg shadow-lg'
+                className='max-w-4xl mx-auto p-6 bg-raised rounded-lg shadow-lg'
             >
                 <h1 className='text-center text-2xl font-bold mb-6'>
-                    Create record
+                    {t('goal.create')}
                 </h1>
 
                 {/* Weight */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Weight:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.weight')}</label>
                     <input type="text" value={weight} onChange={(e) => setWeight(e.target.value)}
-                        className='w-full px-4 py-2 text-white border rounded-lg focus:ring-2 focus:ring-primary-500'
+                        className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
                         placeholder='' required
                     />
                 </div>
 
                 {/* Objective */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Objective:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.objective')}</label>
                     <input type="text" value={objective} onChange={(e) => setObjective(e.target.value)}
-                        className='w-full px-4 py-2 text-white border rounded-lg focus:ring-2 focus:ring-primary-500'
+                        className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition'
                         placeholder='' required
                     />
                 </div>
 
                 {/* Image previews */}
                 <div className="mb-4">
-                    <label className="block font-semibold mb-2 text-white">Images:</label>
+                    <label className="block font-semibold mb-2 text-ink">{t('goal.images')}</label>
                     <div className="flex flex-wrap gap-2 mb-2">
                         {imagePreviews.map((preview, idx) => (
                             <div
@@ -143,7 +146,7 @@ export const CreateGoal = () => {
                                 onDragStart={(e) => handleDragStart(e, idx)}
                                 onDragOver={handleDragOver}
                                 onDrop={(e) => handleDrop(e, idx)}
-                                className="relative cursor-move rounded-lg border-2 border-transparent hover:border-blue-500 transition-all"
+                                className="relative cursor-move rounded-lg border-2 border-transparent hover:border-accent transition-all"
                             >
                                 <img
                                     src={preview.url}
@@ -153,7 +156,7 @@ export const CreateGoal = () => {
                                 <button
                                     type="button"
                                     onClick={() => removeImage(idx)}
-                                    className="absolute top-1 right-1 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm"
+                                    className="absolute top-1 right-1 bg-red-600 text-white hover:bg-red-700 rounded-full w-6 h-6 flex items-center justify-center text-sm"
                                 >
                                     ×
                                 </button>
@@ -162,37 +165,35 @@ export const CreateGoal = () => {
                     </div>
                     {/* File input */}
                     <input type="file" multiple accept="image/*" onChange={handleFileChange}
-                        className='w-full py-2 px-2 border rounded-lg focus:ring-2 focus:ring-primary-500 bg-neutral-800 text-white'
+                        className='w-full text-sm text-ink-muted rounded-lg border border-dashed border-line px-3 py-3 cursor-pointer transition hover:border-accent file:mr-3 file:px-3 file:py-1.5 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-on-accent file:cursor-pointer'
                     />
                 </div>
 
-                <div className='bg-gray-800 rounded-lg px-2 py-2'>
-                    <h2>Note: Remember that it is recommended to take the photo in the morning on an empty stomach and witch your body relaxed.</h2>
+                <div className='flex items-start gap-2.5 bg-sunken border border-line rounded-lg px-3 py-3 mt-4'>
+                    <Info size={16} className='shrink-0 mt-0.5 text-ink-faint' />
+                    <p className='text-sm text-ink-muted'>
+                        {t('goal.photoNote')}
+                    </p>
                 </div>
 
                 {/* Save button */}
                 <div className="mt-6 text-right">
                     <button
                         type='submit'
-                        className={`px-4 py-2 rounded-lg transition text-white ${loading
-                            ? "bg-primary-500 cursor-not-allowed"
-                            : "dark:bg-primary-300 dark:text-black border-2 dark:border-black font-semibold dark:hover:bg-primary-600 hover:bg-[#0303be]"
-                            }`}
+                        className='w-full mt-2 px-4 py-2.5 rounded-lg font-semibold bg-accent text-on-accent hover:bg-accent-hover transition disabled:opacity-60 disabled:cursor-not-allowed'
                         disabled={loading}
                     >
-                        {loading ? "Creating record..." : "Save Record"}
+                        {loading ? t('goal.creating') : t('goal.save')}
                     </button>
                 </div>
             </form>
 
             {/* Modal loading */}
             {loading && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-neutral-800 p-8 rounded-2xl shadow-xl text-center">
-                        <p className="text-xl font-bold mb-4 text-white">Creating record...</p>
-                        <div className="w-64 bg-neutral-200 rounded-full h-4 overflow-hidden">
-                            <div className="bg-primary-600 h-4 animate-pulse w-1/2"></div>
-                        </div>
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
+                    <div className="bg-raised border border-line p-8 rounded-2xl shadow-xl text-center min-w-[16rem]">
+                        <p className="text-xl font-bold mb-4 text-ink">{t('goal.creating')}</p>
+                        <div className="progress-track" />
                     </div>
                 </div>
             )}

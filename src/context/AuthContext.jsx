@@ -81,7 +81,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true)
             return { success: true, message: 'Login successfully' }
         } else {
-            return { success: false, message: result.message || 'Invalid credentials' }
+            return { success: false, message: result.error || result.message || 'Invalid credentials' }
         }
     } catch (error) {
         console.error('Error in login:', error)
@@ -108,7 +108,7 @@ export const AuthProvider = ({ children }) => {
                 setIsAuthenticated(true)
                 return { success: true, message: 'Register successfully' }
             } else {
-                return { success: false, message: result.message || 'Error in register' }
+                return { success: false, message: result.error || result.message || 'Error in register' }
             }
         } catch (error) {
             console.error('Error in register:', error)

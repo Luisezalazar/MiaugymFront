@@ -1,6 +1,6 @@
 const fetchWithAuth = async (url, options = {}) => {
 
-    const API_URL = process.env.VITE_BASE_URL
+    const API_URL = import.meta.env.VITE_BASE_URL
     const token = localStorage.getItem('token');
 
     const config = {

@@ -1,27 +1,30 @@
 import React, { useState } from 'react'
-import { href, Link, useLocation } from 'react-router-dom'
-import { LogOut, Menu, Moon, Sun, X } from "lucide-react"
+import { Link, useLocation } from 'react-router-dom'
+import { Languages, LogOut, Menu, Moon, Sun, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useLang } from '../context/LanguageContext';
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme()
+  const { lang, toggleLang, t } = useLang()
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { user, isAuthenticated, logout } = useAuth()
 
   const links = [
-    //{ name: "Exercises", href: "/exercises" },
-    { name: "My Routine", href: "/MyRoutine" },
-    { name: "Calories Calculator", href: "/calculator" },
-    { name: "Meals", href: "/food" },
-    { name: "Calculator Foods", href: "/calculatorFoods" },
-    { name: "Weight Goal", href: "/goal" }
+    { name: t('nav.myRoutine'), href: "/myRoutine" },
+    { name: t('nav.calculator'), href: "/calculator" },
+    { name: t('nav.meals'), href: "/food" },
+    { name: t('nav.calculatorFoods'), href: "/calculatorFoods" },
+    { name: t('nav.weightGoal'), href: "/goal" }
   ]
 
-  //Function know link active
-  const isActive = (path) => location.pathname === path;
+  // Comparacion sin distinguir mayusculas: los href del navbar y las rutas
+  // de App.jsx no siempre coinciden en capitalizacion.
+  const isActive = (path) =>
+    location.pathname.toLowerCase() === path.toLowerCase();
 
   const handleLogout = () => {
     logout()
@@ -29,143 +32,133 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="bg-[#0202FF] text-white font-bold dark:bg-black dark:text-white dark:drop-shadow-primary-300 dark:drop-shadow-lg drop-shadow-black drop-shadow-lg">
+    <nav className="sticky top-0 z-50 bg-raised/95 backdrop-blur border-b border-line text-ink">
 
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
         {/* Logo */}
-        <div className="text-2xl font-bold cursor-pointer">
-          <Link to={"/home"} className='flex'>
-            Miau<span className='dark:text-primary-300 text-black'>Gym</span>
-            <img src="../logo.ico " className='w-10 h-8 ml-1' />
-          </Link>
-        </div>
+        <Link to={"/home"} className='flex items-center gap-2 text-xl font-bold shrink-0'>
+          <img src="/logo.ico" alt="" className='w-7 h-7' />
+          <span>Miau<span className='text-accent'>Gym</span></span>
+        </Link>
 
         {/* Links desktop */}
-        <ul className="hidden md:flex space-x-6">
+        <ul className="hidden lg:flex items-center gap-1">
           {links.map((link) => (
             <li key={link.name}>
               <Link
                 to={link.href}
-                className={`transition ${isActive(link.href) ? "dark:text-primary-700 font-semibold " : "dark:hover:text-primary-400 hover:text-black"}`}
+                className={`px-3 py-2 rounded-md text-sm font-medium whitespace-nowrap transition
+                  ${isActive(link.href)
+                    ? "bg-accent-soft text-accent"
+                    : "text-ink-muted hover:text-ink hover:bg-sunken"}`}
               >{link.name}
               </Link>
             </li>
           ))}
         </ul>
 
-        {/* User and button desktop */}
-        <div className="hidden md:flex items-center space-x-4">
+        {/* Acciones */}
+        <div className="flex items-center gap-2">
+          {/* Idioma */}
+          <button
+            onClick={toggleLang}
+            aria-label={t('nav.language')}
+            title={t('nav.language')}
+            className='flex items-center gap-1 p-2 rounded-md text-ink-muted hover:text-ink hover:bg-sunken transition'>
+            <Languages size={20} />
+            <span className='text-xs font-semibold uppercase'>{lang}</span>
+          </button>
+
+          {/* Toggle de tema */}
+          <button
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? t('nav.toLight') : t('nav.toDark')}
+            className='p-2 rounded-md text-ink-muted hover:text-ink hover:bg-sunken transition'>
+            {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+
           {isAuthenticated ? (
-            <>
-              {/* Name user */}
-              <span className='text-white'>
-                <span className='font-semibold dark:text-primary-400'>
-                  {user?.user || 'User'}
-                </span>
+            <div className="hidden lg:flex items-center gap-3">
+              <span className='text-sm font-medium text-ink-muted'>
+                {user?.user || 'User'}
               </span>
-
-              {/* Button logout */}
               <button onClick={handleLogout}
-                className='flex items-center space-x-2 dark:bg-primary-600 bg-white dark:hover:bg-primary-700 hover:bg-[#0202FF] hover:text-white border-white border-2 dark:border-black px-4 py-2 rounded-lg transition text-black dark:text-white'>
+                className='flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium
+                  border border-line text-ink-muted hover:text-danger hover:border-danger transition'>
                 <LogOut size={16} />
-                <span>Log out</span>
+                <span>{t('nav.logout')}</span>
               </button>
-
-            </>
+            </div>
           ) : (
-            <Link to={"/login"} className='hidden md:block bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg transition'>
-              LogIn
+            <Link to={"/login"}
+              className='hidden lg:block bg-accent text-on-accent hover:bg-accent-hover px-4 py-2 rounded-md text-sm font-semibold transition'>
+              {t('nav.login')}
             </Link>
           )}
-        </div>
 
-
-
-
-        {/* Button burger */}
-        <div>
-          {/* Button Dark / Light */}
-          <button onClick={toggleTheme} className='mx-4 px-2 p-2 rounded-lg bg-white text-black dark:bg-primary-300 hover:scale-105 transition'>
-            {theme === "dark" ? <Sun /> : <Moon />}
-          </button>
+          {/* Hamburguesa */}
           <button
-            className='md:hidden p-2 rounded-log dark:hover:bg-primary-400 transition rounded-lg hover:bg-black'
+            aria-label={t('nav.openMenu')}
+            aria-expanded={open}
+            className='lg:hidden p-2 rounded-md text-ink-muted hover:text-ink hover:bg-sunken transition'
             onClick={() => setOpen(!open)}>
-            {open ? <X size={24} /> : <Menu size={24} />}
+            {open ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
-
-
-
       </div>
 
       {/* Menu mobile */}
-
       <AnimatePresence>
-
         {open && (
-
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="md:hidden dark:bg-black bg-[#0202FF] px-6 py-4 space-y-4 border-t-2 dark:border-primary-300 border-black"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            className="lg:hidden overflow-hidden border-t border-line bg-raised"
           >
+            <div className="px-4 py-3 space-y-1">
+              {links.map((link) => (
+                <Link
+                  key={link.name}
+                  to={link.href}
+                  onClick={() => setOpen(false)}
+                  className={`block px-3 py-2.5 rounded-md font-medium transition
+                    ${isActive(link.href)
+                      ? "bg-accent-soft text-accent"
+                      : "text-ink-muted hover:text-ink hover:bg-sunken"}`}
+                >
+                  {link.name}
+                </Link>
+              ))}
 
-            {links.map((link) => (
-              <Link
-                key={link.name}
-                to={link.href}
-                onClick={() => setOpen(false)}
-                className={`block transition ${isActive(link.href)
-                  ? "text-primary-400 font-semibold"
-                  : "dark:hover:text-primary-400 hover:text-black"
-                  }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-            {/* User and button mobile */}
-            {isAuthenticated ? (
-              <>
-                {/* User mobile */}
-                <div className="text-white border-t-2 dark:border-primary-300 border-black pt-4">
-                  <span className="font-bold dark:text-primary-400 text-white">
+              {isAuthenticated ? (
+                <div className="pt-3 mt-2 border-t border-line flex items-center justify-between gap-3">
+                  <span className="px-3 text-sm font-medium text-ink-muted truncate">
                     {user?.user || 'User'}
                   </span>
-
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium shrink-0
+                      border border-line text-ink-muted hover:text-danger hover:border-danger transition"
+                  >
+                    <LogOut size={16} />
+                    <span>{t('nav.logout')}</span>
+                  </button>
                 </div>
-
-                {/* Button logout mobile */}
-                <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center justify-center space-x-2  px-4 py-2 rounded-lg transition 
-                  hover:bg-[#0202FF] dark:hover:bg-primary-300
-                  dark:bg-primary-500 dark:hover:text-black bg-white text-black hover:text-white hover:border-1"
+              ) : (
+                <Link
+                  to="/login"
+                  onClick={() => setOpen(false)}
+                  className="mt-2 block text-center bg-accent text-on-accent hover:bg-accent-hover px-4 py-2.5 rounded-md font-semibold transition"
                 >
-                  <LogOut size={16} />
-                  <span>Log out</span>
-                </button>
-              </>
-            ) : (
-              <Link
-                to="/login"
-                onClick={() => setOpen(false)}
-                className="w-full block text-center bg-primary-600 hover:bg-primary-700 px-4 py-2 rounded-lg transition"
-              >
-                LogIn
-              </Link>
-            )}
-
-
-
+                  {t('nav.login')}
+                </Link>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
-
     </nav>
   )
-
 }

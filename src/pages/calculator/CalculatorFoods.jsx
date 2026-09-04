@@ -1,4 +1,21 @@
 import React, { useState } from 'react'
+import { useLang } from '../../context/LanguageContext'
+
+// Traduce la etiqueta cualitativa a un tono. Para proteina "alto" es bueno;
+// para azucar es al reves.
+const toneFor = (label, kind) => {
+  if (kind === 'protein') {
+    if (label.startsWith('Rich')) return 'good'
+    if (label.startsWith('Moderate')) return 'warn'
+    return 'neutral'
+  }
+  if (kind === 'sugar') {
+    if (label.startsWith('Low')) return 'good'
+    if (label.startsWith('Moderate')) return 'warn'
+    if (label.startsWith('High')) return 'bad'
+  }
+  return 'neutral'
+}
 
 export const CalculatorFoods = () => {
   const [calories, setCalories] = useState("")
@@ -6,6 +23,7 @@ export const CalculatorFoods = () => {
   const [portion, setPortion] = useState("")
   const [sugar, setSugar] = useState("")
   const [loading, setLoading] = useState(false)
+  const { t } = useLang()
   const [result, setResult] = useState(null)
 
   const handleCalculate = () => {
@@ -54,67 +72,93 @@ export const CalculatorFoods = () => {
   return (
     <div className='px-6 py-8'>
       <div>
-        <h1 className='text-center text-4xl mb-6 font-semibold'>Foods Protein Checker</h1>
-        <div className='max-w-xl mx-auto p-6 dark:bg-neutral-900 rounded-lg shadow-lg bg-[#0202FF]'>
-          <h1 className='text-center text-2xl font-bold text-white'>
-            Miau<span className='dark:text-primary-300 text-black'>Gym</span>
-          </h1>
-
+        <h1 className='text-center text-4xl mb-6 font-semibold'>{t('food.title')}</h1>
+        <div className='max-w-xl mx-auto p-6 bg-raised border border-line rounded-lg shadow-lg'>
           <div className='mb-6'>
 
             {/* Calories */}
-            <label className='block font-semibold mb-2 mt-4 text-white'>Energy value(Kcal)</label>
+            <label className='block font-semibold mb-2 mt-4 text-ink'>{t('food.energy')}</label>
             <input type="number" value={calories} onChange={(e) => setCalories(e.target.value)}
-              className='w-full py-2 px-2 border-2 rounded-lg text-white dark:bg-neutral-900 bg-[#0202FF]' required />
+              className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required />
 
             {/* Protein */}
-            <label className='block font-semibold mb-2 mt-4 text-white'>Protein (g)</label>
+            <label className='block font-semibold mb-2 mt-4 text-ink'>{t('food.protein')}</label>
             <input type="number" value={protein} onChange={(e) => setProtein(e.target.value)}
-              className='w-full py-2 px-2 border-2 rounded-lg text-white dark:bg-neutral-900 bg-[#0202FF]' required />
+              className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required />
 
             {/* Sugar */}
-            <label className='block font-semibold mb-2 mt-4 text-white'>Sugar (g)</label>
+            <label className='block font-semibold mb-2 mt-4 text-ink'>{t('food.sugar')}</label>
             <input type="number" value={sugar} onChange={(e) => setSugar(e.target.value)}
-              className='w-full py-2 px-2 border-2 rounded-lg text-white dark:bg-neutral-900 bg-[#0202FF]' />
+              className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' />
 
             {/* Portion */}
-            <label className='block font-semibold mb-2 mt-4 text-white'>Grams per portion (g)</label>
+            <label className='block font-semibold mb-2 mt-4 text-ink'>{t('food.portion')}</label>
             <input type="number" value={portion} onChange={(e) => setPortion(e.target.value)}
-              className='w-full py-2 px-2 border-2 rounded-lg text-white dark:bg-neutral-900 bg-[#0202FF]' required />
+              className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required />
           </div>
 
           {/* Button */}
-          <div className="mt-6 text-right">
-            <button type='submit'
-              className={`px-4 py-2 rounded-lg transition text-white ${loading ? "dark:bg-primary-300 cursor-not-allowed" : "dark:bg-primary-300 dark:hover:bg-primary-500 dark:text-black font-semibold border-2 bg-[#0202FF] hover:bg-[#3232ff]"}`}
-              disabled={loading} onClick={handleCalculate}>
-              {loading ? "Calculating..." : "Calculate"}
-            </button>
-          </div>
+          <button type='submit'
+            className='w-full mt-6 px-4 py-2.5 rounded-lg font-semibold
+              bg-accent text-on-accent hover:bg-accent-hover transition
+              disabled:opacity-60 disabled:cursor-not-allowed'
+            disabled={loading} onClick={handleCalculate}>
+            {loading ? t('calc.calculating') : t('calc.calculate')}
+          </button>
 
-          {/* Result */}
-          {result && (
-            <div className="mt-6 bg-gray-800 p-6 rounded-lg text-white">
-              <h2 className="text-xl font-bold mb-4">Nutritional results</h2>
-              <p><strong>% Proteins in calories:</strong> {result.proteinPercentage.toFixed(1)}% ({result.proteinLabel})</p>
-              {sugar && (
-                <>
-                  <p><strong>% Sugar calories:</strong> {result.sugarPercentage.toFixed(1)}% ({result.sugarLabel})</p>
-                </>
-              )}
-              <p><strong>Calorie density:</strong> {result.kcalPerGram.toFixed(2)} kcal/g ({result.calorieDensity})</p>
-            </div>
-          )}
         </div>
+
+        {/* Resultados fuera de la tarjeta del formulario, con la lectura cualitativa
+            en color solo donde el sentido es inequivoco: mas proteina mejor,
+            mas azucar peor. La densidad calorica queda neutra porque depende
+            de si estas en deficit o superavit. */}
+        {result && (
+          <div className='max-w-xl mx-auto mt-6 space-y-3'>
+            {[
+              {
+                label: t('food.proteinPct'),
+                value: `${result.proteinPercentage.toFixed(1)}%`,
+                note: result.proteinLabel,
+                tone: toneFor(result.proteinLabel, 'protein'),
+              },
+              ...(sugar ? [{
+                label: t('food.sugarPct'),
+                value: `${result.sugarPercentage.toFixed(1)}%`,
+                note: result.sugarLabel,
+                tone: toneFor(result.sugarLabel, 'sugar'),
+              }] : []),
+              {
+                label: t('food.density'),
+                value: `${result.kcalPerGram.toFixed(2)} kcal/g`,
+                note: result.calorieDensity,
+                tone: 'neutral',
+              },
+            ].map((r) => (
+              <div key={r.label}
+                className='flex items-center justify-between gap-4 flex-wrap
+                  bg-raised border border-line rounded-xl px-4 py-3.5'>
+                <div className='text-sm text-ink-muted'>{r.label}</div>
+                <div className='flex items-center gap-3'>
+                  <span className='text-xl font-bold tabular-nums text-ink'>{r.value}</span>
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap
+                    ${r.tone === 'good' ? 'bg-success-soft text-success'
+                      : r.tone === 'warn' ? 'bg-warning-soft text-warning'
+                      : r.tone === 'bad' ? 'bg-danger-soft text-danger'
+                      : 'bg-sunken text-ink-muted'}`}>
+                    {r.note}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Modal load */}
         {loading && (
-          <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-            <div className='bg-gray-800 p-8 rounded-2xl shadow-xl text-center'>
-              <p className='text-xl font-bold mb-4 text-white'>Loading...</p>
-              <div className='w-64 bg-gray-200 rounded-full h-4 overflow-hidden'>
-                <div className='bg-primary-600 h-4 animate-pulse w-1/2'></div>
-              </div>
+          <div className='fixed inset-0 flex items-center justify-center bg-black/50 z-50'>
+            <div className='bg-raised border border-line p-8 rounded-2xl shadow-xl text-center min-w-[16rem]'>
+              <p className='text-xl font-bold mb-4 text-ink'>{t('auth.loading')}</p>
+              <div className="progress-track" />
             </div>
           </div>
         )}

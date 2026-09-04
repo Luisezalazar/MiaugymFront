@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
+import { useLang } from '../../context/LanguageContext'
 
 export const Calculator = () => {
 
     const [loading, setLoading] = useState(false)
+    const { t } = useLang()
     const [gender, setGender] = useState("")
     const [age, setAge] = useState("")
     const [weight, setWeight] = useState("")
@@ -40,79 +42,96 @@ export const Calculator = () => {
     return (
         <div className='px-6 py-8'>
             <div>
-                <h1 className='text-center text-4xl mb-6 font-semibold'>Calorie Calculator</h1>
-                <div className='max-w-xl mx-auto p-6 dark:bg-neutral-900 rounded-lg shadow-lg bg-[#0202FF] '>
-                    <h1 className='text-center text-2xl font-bold text-white'>Miau<span className='dark:text-primary-300 text-black'>Gym</span></h1>
+                <h1 className='text-center text-4xl mb-6 font-semibold'>{t('calc.title')}</h1>
+                <div className='max-w-xl mx-auto p-6 bg-raised border border-line rounded-lg shadow-lg '>
                     <div className='mb-6'>
 
                         {/* Gender */}
-                        <label className='block font-semibold mb-2  text-white'>Gender</label>
+                        <label className='block font-semibold mb-2 text-ink'>{t('calc.gender')}</label>
 
                         <select name="gender" id="gender" value={gender} onChange={(e) => setGender(e.target.value)}
-                            className='w-full py-2 px-2 border-2 rounded-lg focus:ring-2 dark:focus:ring-primary-500 dark:bg-neutral-900 text-white bg-[#0202FF]' required>
-                            <option value="">-Select-</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required>
+                            <option value="">{t('calc.select')}</option>
+                            <option value="male">{t('calc.male')}</option>
+                            <option value="female">{t('calc.female')}</option>
                         </select>
 
                         {/* Age */}
-                        <label className='block font-semibold mb-2 mt-4 text-white'>Age</label>
+                        <label className='block font-semibold mb-2 mt-4 text-ink'>{t('calc.age')}</label>
                         <input type="number" name='age' value={age} onChange={(e) => setAge(e.target.value)}
-                            className='w-full py-2 px-2 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 text-white' required />
+                            className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required />
 
                         {/* Weight */}
-                        <label className='block font-semibold mb-2 mt-4 text-white'>Weight</label>
+                        <label className='block font-semibold mb-2 mt-4 text-ink'>{t('calc.weight')}</label>
                         <input type="number" name='weight' value={weight} onChange={(e) => setWeight(e.target.value)}
-                            className='w-full py-2 px-2 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 text-white' required />
+                            className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required />
 
                         {/* Height */}
-                        <label className='block font-semibold mb-2 mt-4 text-white'>Height (cm)</label>
+                        <label className='block font-semibold mb-2 mt-4 text-ink'>{t('calc.height')}</label>
                         <input type="number" name='height' value={height} onChange={(e) => setHeight(e.target.value)}
-                            className='w-full py-2 px-2 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 text-white' required />
+                            className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required />
 
-                        <label className='block font-semibold mb-2 mt-4 text-white'>Activity level</label>
+                        <label className='block font-semibold mb-2 mt-4 text-ink'>{t('calc.activity')}</label>
                         <select name="activity" id="activity" value={activity} onChange={(e) => setActivity(e.target.value)}
-                            className='w-full py-2 px-2 border-2 rounded-lg focus:ring-2 focus:ring-primary-500 dark:bg-neutral-900 text-white bg-[#0202FF]' required>
-                            <option value="">-Select-</option>
-                            <option value="sedentary">Sedentary (little or no exercise)</option>
-                            <option value="light">Light (exercise 1-3 days/week)</option>
-                            <option value="moderate">Moderate (exercise 3-5 days/week)</option>
-                            <option value="intense">Intense (exercise 6-7 days/week)</option>
-                            <option value="veryIntense">Very intense (training 2 times/day, strong physical work)</option>
+                            className='w-full px-3 py-2.5 rounded-lg bg-sunken border border-line text-ink placeholder:text-ink-faint focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent transition' required>
+                            <option value="">{t('calc.select')}</option>
+                            <option value="sedentary">{t('calc.sedentary')}</option>
+                            <option value="light">{t('calc.light')}</option>
+                            <option value="moderate">{t('calc.moderate')}</option>
+                            <option value="intense">{t('calc.intense')}</option>
+                            <option value="veryIntense">{t('calc.veryIntense')}</option>
                         </select>
 
                     </div>
 
                     {/* Save button */}
-                    <div className="mt-6 text-right">
-                        <button type='submit'
-                            className={`px-4 py-2 rounded-lg transition text-white ${loading ? "dark:bg-primary-300 cursor-not-allowed" : "dark:bg-primary-300 dark:hover:bg-primary-500 dark:text-black font-semibold  border-2 bg-[#0202FF] hover:bg-[#3232ff]"}`}
-                            disabled={loading} onClick={handleCalculate}>
-                            {loading ? "Calculating..." : "Calculate"}
-                        </button>
-                    </div>
-
-                    <div>
-                        {result && (
-                            <div className="mt-6 bg-gray-800 p-6 rounded-lg text-white">
-                                <h2 className="text-xl font-bold mb-4">Formula results Mifflin-St Jeor</h2>
-                                <p><strong>Maintenance:</strong> {result.maintenance.toFixed(0)} kcal</p>
-                                <p><strong>Deficit (to lose fat):</strong> {result.deficit.toFixed(0)} kcal</p>
-                                <p><strong>Surplus (to gain muscle):</strong> {result.plus.toFixed(0)} kcal</p>
-                            </div>
-                        )}
-                    </div>
+                    <button type='submit'
+                        className='w-full mt-6 px-4 py-2.5 rounded-lg font-semibold
+                            bg-accent text-on-accent hover:bg-accent-hover transition
+                            disabled:opacity-60 disabled:cursor-not-allowed'
+                        disabled={loading} onClick={handleCalculate}>
+                        {loading ? t('calc.calculating') : t('calc.calculate')}
+                    </button>
 
                 </div>
 
+                {/* Resultados: el numero es el producto de la pantalla, no una linea de texto */}
+                {result && (
+                    <div className='max-w-xl mx-auto mt-6'>
+                        <div className='grid grid-cols-1 sm:grid-cols-3 gap-3'>
+                            {[
+                                { label: t('calc.maintenance'), value: result.maintenance, hint: t('calc.keepWeight'), primary: true },
+                                { label: t('calc.deficit'), value: result.deficit, hint: t('calc.toLoseFat') },
+                                { label: t('calc.surplus'), value: result.plus, hint: t('calc.toGainMuscle') },
+                            ].map((r) => (
+                                <div key={r.label}
+                                    className={`rounded-xl p-4 border text-center
+                                        ${r.primary
+                                            ? 'bg-accent-soft border-accent'
+                                            : 'bg-raised border-line'}`}>
+                                    <div className='text-xs font-semibold uppercase tracking-wider text-ink-faint'>
+                                        {r.label}
+                                    </div>
+                                    <div className={`text-3xl font-bold tabular-nums mt-1.5
+                                        ${r.primary ? 'text-accent' : 'text-ink'}`}>
+                                        {r.value.toFixed(0)}
+                                    </div>
+                                    <div className='text-xs text-ink-muted mt-1'>kcal · {r.hint}</div>
+                                </div>
+                            ))}
+                        </div>
+                        <p className='text-xs text-ink-faint text-center mt-3'>
+                            {t('calc.formula')}
+                        </p>
+                    </div>
+                )}
+
                 {/* Modal loading */}
                 {loading && (
-                    <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
-                        <div className='bg-gray-800 p-8 rounded-2xl shadow-xl text-center'>
-                            <p className='text-xl font-bold mb-4 text-white'>Calculating...</p>
-                            <div className='w-64 bg-gray-200 rounded-full h-4 overflow-hidden'>
-                                <div className='bg-primary-600 h-4 animate-pulse w-1/2'></div>
-                            </div>
+                    <div className='fixed inset-0 flex items-center justify-center bg-black/50 z-50'>
+                        <div className='bg-raised border border-line p-8 rounded-2xl shadow-xl text-center min-w-[16rem]'>
+                            <p className='text-xl font-bold mb-4 text-ink'>{t('calc.calculating')}</p>
+                            <div className="progress-track" />
                         </div>
                     </div>
                 )}
