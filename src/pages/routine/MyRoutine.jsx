@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/auth'
 import { Dumbbell, Edit, MoreVertical, Plus, Timer, Trash, X } from 'lucide-react'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
+import { BASE_URL } from '../../services/apiConfig'
 
 export const MyRoutine = () => {
 
@@ -11,7 +12,6 @@ export const MyRoutine = () => {
   const { t } = useLang()
   const [menu, setMenu] = useState(null)
   const navigate = useNavigate();
-  const BASE_URL = import.meta.env.VITE_BASE_URL
   const [loadingDelete, setLoadingDelete] = useState(null)
   const [loading, setLoading] = useState(false)
 

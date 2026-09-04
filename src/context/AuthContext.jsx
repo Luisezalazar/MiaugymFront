@@ -1,17 +1,9 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from './auth'
+import { BASE_URL } from '../services/apiConfig'
 
-// Create context
-const AuthContext = createContext()
 
-// Hook for use context
-export const useAuth = () => {
-    const context = useContext(AuthContext)
-    if (!context) {
-        throw new Error('useAuth must be used within AuthProvider')
-    }
-    return context
-}
 
 // Provider context Auth
 export const AuthProvider = ({ children }) => {
@@ -19,7 +11,6 @@ export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [loading, setLoading] = useState(true)
     const navigate = useNavigate()
-    const BASE_URL = import.meta.env.VITE_BASE_URL
 
     // Verify token
     useEffect(() => {

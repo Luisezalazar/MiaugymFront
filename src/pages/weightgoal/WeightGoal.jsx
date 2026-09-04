@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/auth'
 import { X } from "lucide-react"
 import { Edit, Images, Plus, Scale, Trash2 } from "lucide-react"
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
+import { BASE_URL } from '../../services/apiConfig'
 
 export const WeightGoal = () => {
   const [goal, setGoal] = useState([])
@@ -23,7 +24,6 @@ export const WeightGoal = () => {
   const [touchStartX, setTouchStartX] = useState(null)
   const [touchEndX, setTouchEndX] = useState(null)
 
-  const BASE_URL = import.meta.env.VITE_BASE_URL
 
   // Fetch goals
   const fetchGoals = async () => {

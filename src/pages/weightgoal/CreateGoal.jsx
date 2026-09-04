@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/auth'
 import { Info } from 'lucide-react'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
+import { BASE_URL } from '../../services/apiConfig'
 
 export const CreateGoal = () => {
 
@@ -14,7 +15,6 @@ export const CreateGoal = () => {
     const { t } = useLang()
 
     const { user, getToken } = useAuth()
-    const BASE_URL = import.meta.env.VITE_BASE_URL
     const navigate = useNavigate()
 
     useEffect(() => {

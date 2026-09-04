@@ -1,6 +1,7 @@
+import { BASE_URL } from './apiConfig'
+
 const fetchWithAuth = async (url, options = {}) => {
 
-    const API_URL = import.meta.env.VITE_BASE_URL
     const token = localStorage.getItem('token');
 
     const config = {
@@ -16,7 +17,7 @@ const fetchWithAuth = async (url, options = {}) => {
         config.body = JSON.stringify(options.body);
     }
 
-    const response = await fetch(`${API_URL}${url}`, config);
+    const response = await fetch(`${BASE_URL}${url}`, config);
 
     if (!response.ok) {
         const error = await response.json().catch(() => ({ error: 'Error de red' }));

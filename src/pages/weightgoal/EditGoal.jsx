@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
-import { useLang } from '../../context/LanguageContext'
+import { useAuth } from '../../context/auth'
+import { useLang } from '../../context/language'
+import { BASE_URL } from '../../services/apiConfig'
 
 export const EditGoal = () => {
     const { id } = useParams()
     const { user, getToken } = useAuth()
-    const BASE_URL = import.meta.env.VITE_BASE_URL
     const navigate = useNavigate()
 
     const [weight, setWeight] = useState("")

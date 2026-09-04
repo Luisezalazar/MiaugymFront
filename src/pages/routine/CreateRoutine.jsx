@@ -1,10 +1,11 @@
 import { BookOpen, Plus, Trash, X } from 'lucide-react';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/auth'
 import { ExercisePicker } from '../../component/ExercisePicker'
 import { ExerciseFrame } from '../../component/ExerciseFrame'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
+import { BASE_URL } from '../../services/apiConfig'
 
 
 export const CreateRoutine = () => {
@@ -24,7 +25,6 @@ export const CreateRoutine = () => {
   //obtain user and token
   const { user, getToken } = useAuth()
   const { t } = useLang()
-  const BASE_URL = import.meta.env.VITE_BASE_URL
   const navigate = useNavigate()
 
   const handleChange = (index, field, value) => {

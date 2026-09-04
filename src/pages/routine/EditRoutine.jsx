@@ -1,10 +1,11 @@
 import { BookOpen, Plus, Trash, ArrowUp, ArrowDown, X } from 'lucide-react';
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/auth'
 import { ExercisePicker } from '../../component/ExercisePicker'
 import { ExerciseFrame } from '../../component/ExerciseFrame'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
+import { BASE_URL } from '../../services/apiConfig'
 
 export const EditRoutine = () => {
 
@@ -12,7 +13,6 @@ export const EditRoutine = () => {
     const navigate = useNavigate()
     const { user, getToken } = useAuth()
     const { t } = useLang()
-    const BASE_URL = import.meta.env.VITE_BASE_URL
 
     //Routine received
     const routine = state?.routine;

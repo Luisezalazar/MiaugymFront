@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Search, X, Loader2 } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/auth'
 import { ExerciseFrame } from './ExerciseFrame'
-import { useLang } from '../context/LanguageContext'
+import { useLang } from '../context/language'
+import { BASE_URL } from '../services/apiConfig'
 
 /*
   Selector del catalogo de ejercicios.
@@ -14,7 +15,6 @@ import { useLang } from '../context/LanguageContext'
 export const ExercisePicker = ({ open, onClose, onSelect }) => {
     const { getToken } = useAuth()
     const { t } = useLang()
-    const BASE_URL = import.meta.env.VITE_BASE_URL
 
     const [search, setSearch] = useState('')
     const [muscle, setMuscle] = useState('')
