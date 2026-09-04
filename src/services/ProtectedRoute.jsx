@@ -1,8 +1,8 @@
 // components/ProtectedRoute.jsx
 import React from 'react'
 import { Navigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
-import { useLang } from '../context/LanguageContext'
+import { useAuth } from '../context/auth'
+import { useLang } from '../context/language'
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth()

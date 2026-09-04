@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
 
 export const Calculator = () => {
 

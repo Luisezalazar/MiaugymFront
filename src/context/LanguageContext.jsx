@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from "react"
 import { translations } from '../i18n/translations'
+import { LanguageContext } from './language'
 
-const LanguageContext = createContext()
 
 const LANGS = ['en', 'es']
 
@@ -45,8 +45,3 @@ export const LanguageProvider = ({ children }) => {
     )
 }
 
-export const useLang = () => {
-    const ctx = useContext(LanguageContext)
-    if (!ctx) throw new Error('useLang debe usarse dentro de LanguageProvider')
-    return ctx
-}

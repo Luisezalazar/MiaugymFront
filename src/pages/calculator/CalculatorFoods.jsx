@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
 
 // Traduce la etiqueta cualitativa a un tono. Para proteina "alto" es bueno;
 // para azucar es al reves.

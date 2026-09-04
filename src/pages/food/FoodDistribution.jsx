@@ -3,7 +3,7 @@ import { CaloricDeficit } from './CaloricDeficit.jsx'
 import { CaloricSurplus } from './CaloricSurplus.jsx'
 import { Maintenance } from './Maintenance.jsx'
 import { Minus, Plus, Equal } from 'lucide-react'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
 
 const OPTIONS = [
   {

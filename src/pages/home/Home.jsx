@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
-import { useTheme } from '../../context/ThemeContext'
-import { useLang } from '../../context/LanguageContext'
+import { useTheme } from '../../context/theme'
+import { useLang } from '../../context/language'
 
 const SHORTCUTS = [
   { href: '/myRoutine', key: 'home.myRoutines', img: '/routine.png' },

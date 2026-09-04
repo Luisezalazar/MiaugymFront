@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Languages, LogOut, Menu, Moon, Sun, X } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
-import { useLang } from '../context/LanguageContext';
+// Se importa como `Motion` (mayuscula) a proposito: la config de ESLint no
+// incluye eslint-plugin-react, asi que no detecta el uso dentro de JSX y lo
+// marcaba como variable sin usar. El varsIgnorePattern '^[A-Z_]' lo cubre.
+import { motion as Motion, AnimatePresence } from "framer-motion";
+import { useAuth } from '../context/auth';
+import { useTheme } from '../context/theme';
+import { useLang } from '../context/language';
 
 export const Navbar = () => {
   const { theme, toggleTheme } = useTheme()
@@ -110,7 +113,7 @@ export const Navbar = () => {
       {/* Menu mobile */}
       <AnimatePresence>
         {open && (
-          <motion.div
+          <Motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -156,7 +159,7 @@ export const Navbar = () => {
                 </Link>
               )}
             </div>
-          </motion.div>
+          </Motion.div>
         )}
       </AnimatePresence>
     </nav>

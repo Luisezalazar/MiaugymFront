@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../context/AuthContext'
+import { useAuth } from '../../context/auth'
 import { AlertCircle, Eye, EyeOff, LogIn as LogInIcon } from 'lucide-react'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
 
 export const LogIn = () => {
     const [formulary, setFormulary] = useState({

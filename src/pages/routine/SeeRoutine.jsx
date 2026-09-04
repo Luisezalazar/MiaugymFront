@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { ExerciseFrame } from '../../component/ExerciseFrame'
 import { formatWeight } from '../../services/format'
 import { ExerciseFocus } from '../../component/ExerciseFocus'
-import { useLang } from '../../context/LanguageContext'
+import { useLang } from '../../context/language'
 
 export const SeeRoutine = () => {
 

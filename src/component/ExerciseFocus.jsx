@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import { ExerciseFrame } from './ExerciseFrame'
 import { formatWeight } from '../services/format'
-import { useLang } from '../context/LanguageContext'
+import { useLang } from '../context/language'
 
 /*
   Vista de enfoque: un ejercicio por pantalla.

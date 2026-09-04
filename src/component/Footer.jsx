@@ -1,7 +1,7 @@
 import { Github, Instagram } from 'lucide-react'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { useLang } from '../context/LanguageContext'
+import { useLang } from '../context/language'
 
 const linkDefs = [
     { key: 'nav.calculator', href: "/calculator" },
